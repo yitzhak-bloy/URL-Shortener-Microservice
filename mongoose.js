@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const dns = require('dns');
 
 const Url = require('./models/url');
 
@@ -7,13 +8,22 @@ mongoose.connect(
   .then(() => console.log('Connected to DB'))
   .catch(() => console.log('Connected failed1'))
 
-const createUrl = async (req, res, next) => {
-  const createUrl = new Url({
-    url: req.body.url
-  });
-  const result = await createUrl.save();
+const createUrl = (req, res, next) => {
+  const REPLACE_REGEX = /^https?:\/\//i
+  const urlFix = req.body.url.replace(REPLACE_REGEX, '');
 
-  res.json({"original_url": result});
+  dns.lookup(urlFix, async (err) => {
+    if (err === null) {
+      const createUrl = new Url({
+        url: urlFix
+      });
+      const result = await createUrl.save();
+    
+      res.json({"original_url": result});
+    } else {
+      res.json({"errore": "invalid URL"})
+    }
+  });
 };
 
 exports.createUrl = createUrl;
