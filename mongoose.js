@@ -15,7 +15,7 @@ const createUrl = (req, res, next) => {
   dns.lookup(urlFix, async (err) => {
     if (err === null) {
       const createUrl = new Url({
-        url: urlFix
+        url: req.body.url
       });
       const result = await createUrl.save();
     
