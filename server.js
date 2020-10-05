@@ -1,8 +1,7 @@
 const express = require('express');
-const mongo = require('mongodb');
-const mongoose = require('mongoose');
-const mongooseCreate = require('./mongoose');
 const bodyParser = require('body-parser')
+
+const router = require('./routs');
 
 const cors = require('cors');
 
@@ -34,7 +33,8 @@ app.get("/api/hello", (req, res) => {
   res.json({greeting: 'hello API'});
 });
 
-app.post("/api/shorturl/new", mongooseCreate.createUrl)
+
+app.use('/api/shorturl', router)
 
 
 app.listen(port, () => {

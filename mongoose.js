@@ -26,4 +26,22 @@ const createUrl = (req, res, next) => {
   });
 };
 
+const getUrl = async (req, res, next) => {
+  const urlId = req.params.urlId;
+  console.log(urlId);
+
+  let url;
+  try {
+    url = await Url.findById(urlId);    
+  } catch (err) {
+    return next(err);
+  }
+
+  if (!url) {
+    res.json({"errore": "Url not found"})
+  }
+    res.json({"original_url found:": url})
+}
+
 exports.createUrl = createUrl;
+exports.getUrl = getUrl;
