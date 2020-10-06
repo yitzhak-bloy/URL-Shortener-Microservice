@@ -24,7 +24,7 @@ const createUrl = (req, res, next) => {
         return next(err);
       }
     
-      res.json({"original_url": createUrl});
+      res.json({"original_url": createUrl.url, "short_url": createUrl._id});
     } else {
       res.json({"errore": "invalid URL"})
     }
@@ -45,7 +45,7 @@ const getUrl = async (req, res, next) => {
     res.json({"errore": "Url not found"})
   }
 
-  res.json({"original_url found:": url})
+  res.redirect(url.url)
 }
 
 exports.createUrl = createUrl;
