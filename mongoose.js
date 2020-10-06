@@ -17,9 +17,14 @@ const createUrl = (req, res, next) => {
       const createUrl = new Url({
         url: req.body.url
       });
-      const result = await createUrl.save();
+
+      try {
+        await createUrl.save();
+      } catch(err) {
+        return next(err);
+      }
     
-      res.json({"original_url": result});
+      res.json({"original_url": createUrl});
     } else {
       res.json({"errore": "invalid URL"})
     }
@@ -28,7 +33,6 @@ const createUrl = (req, res, next) => {
 
 const getUrl = async (req, res, next) => {
   const urlId = req.params.urlId;
-  console.log(urlId);
 
   let url;
   try {
@@ -40,7 +44,8 @@ const getUrl = async (req, res, next) => {
   if (!url) {
     res.json({"errore": "Url not found"})
   }
-    res.json({"original_url found:": url})
+
+  res.json({"original_url found:": url})
 }
 
 exports.createUrl = createUrl;
